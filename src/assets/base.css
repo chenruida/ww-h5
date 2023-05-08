@@ -2,6 +2,7 @@
 
 html {
   font-size: 14px;
+  background-color: rgb(135, 112, 95);
 }
 
 
@@ -221,4 +222,31 @@ textarea:-ms-input-placeholder {
 
 template {
   display: none;
+}
+
+body {
+  background-image: url('back1.jpg');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+}
+
+::-webkit-scrollbar {
+  /*隐藏滚轮*/
+  display: none;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+ul,
+li {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
 }
