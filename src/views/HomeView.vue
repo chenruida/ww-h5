@@ -1,26 +1,38 @@
 <script setup lang="ts">
 import Images from '@/components/Images'
 const datas = ref(Images)
+const carousel = ref<any>([])
+const leftClick = (index: number) => {
+  carousel.value[index].prev()
+}
+const rightClick = (index: number) => {
+  carousel.value[index].next()
+}
+onMounted(() => {
+  console.log(carousel.value)
+})
 </script>
 
 <template>
   <h1 class="title">武威壁画岩画欣赏</h1>
-  <div class="line" v-for="item in datas">
+  <div class="line" v-for="(item, index) in datas" :key="index">
     <div class="img-list">
       <div class="left-arrow arrow">
-        <button class="arrow-button">
+        <button class="arrow-button" @click="leftClick(index)">
           <img :src="leftArrow" alt="" />
         </button>
       </div>
       <div class="imgs">
-        <ul>
-          <li v-for="img in item.items">
-            <img :src="img.src" alt="" />
-          </li>
-        </ul>
+        <el-carousel :interval="6000" type="card" arrow="never" ref="carousel">
+          <el-carousel-item v-for="(img, imIgndex) in item.items" :key="imIgndex">
+            <button>
+              <el-image windth="500px" :src="img.src" />
+            </button>
+          </el-carousel-item>
+        </el-carousel>
       </div>
       <div class="right-arrow arrow">
-        <button class="arrow-button">
+        <button class="arrow-button" @click="rightClick(index)">
           <img :src="rightArrow" alt="" />
         </button>
       </div>
@@ -32,7 +44,7 @@ const datas = ref(Images)
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, onMounted } from 'vue'
 import leftArrow from '../assets/images/left.png'
 import rightArrow from '../assets/images/right.png'
 export default defineComponent({
@@ -55,7 +67,7 @@ export default defineComponent({
 
   .img-list {
     display: flex;
-    height: 80%;
+    justify-content: center;
     width: 100%;
 
     .left-arrow {
@@ -67,56 +79,25 @@ export default defineComponent({
       margin-right: 5%;
     }
     .arrow {
-      position: relative;
       height: 3rem;
       width: 3rem;
       background-color: transparent;
-      margin-top: 6%;
-      .arrow-button {
-        background-color: transparent;
-      }
+      line-height: 300px;
     }
     .imgs {
-      display: flex;
-      flex-wrap: nowrap;
-      justify-content: center;
-      width: 100%;
-      overflow: hidden;
-      ul {
+      width: 70%;
+      .el-carousel__item {
         display: flex;
-        width: 2400px;
-        height: 100%;
-        /* 注意是给ul设置动画，让整个模块跟着一起动 */
-        animation: left_move 3s linear infinite;
-        /* 让动画的状态为播放状态 不设置也行，因为是默认状态 */
-        animation-play-state: running;
-      }
-      ul:hover {
-        animation-play-state: paused;
-      }
-      ul li {
-        display: flex;
-        flex-shrink: 1;
         justify-content: center;
-        align-items: center;
-        width: 200px;
-        height: 100%;
-        margin-left: 30px;
       }
-      img {
-        width: 200px;
-        height: 100%;
+
+      .el-carousel__item:nth-child(2n) {
+        background-color: transparent;
       }
-      // img {
-      //   width: 100%;
-      //   height: 100%;
-      //   margin-right: 10px;
-      //   background-color: gray;
-      //   border-right: 1px solid;
-      //   text-align: center;
-      //   flex-shrink: 0;
-      //   line-height: 50px;
-      // }
+
+      .el-carousel__item:nth-child(2n + 1) {
+        background-color: transparent;
+      }
     }
   }
 
@@ -128,10 +109,8 @@ export default defineComponent({
   }
 }
 
-@keyframes left_move {
-  to {
-    /* 这里偏移的应该是8个盒子的长度，留下四个相同的盒子补上空缺造成视觉差 */
-    transform: translateX(-1600px);
-  }
+button {
+  background-color: transparent;
+  border: none;
 }
 </style>
